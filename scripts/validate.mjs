@@ -1,8 +1,10 @@
 import { access, readFile, readdir } from "node:fs/promises";
-import { join, relative } from "node:path";
+import { relative } from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 
 const root = new URL("../", import.meta.url);
+const rootPath = fileURLToPath(root);
 const errors = [];
 const expectedResultSchemaVersion = "1.1";
 
@@ -189,7 +191,7 @@ async function scan(directoryUrl) {
     const isEnvironmentTemplate = entry.name.startsWith(".env");
     if (!textExtensions.has(extension) && entry.name !== "LICENSE" && !isEnvironmentTemplate) continue;
     const content = await readFile(url, "utf8");
-    const displayPath = relative(join(new URL(root).pathname), url.pathname);
+    const displayPath = relative(rootPath, fileURLToPath(url));
     for (const pattern of secretPatterns) {
       pattern.regex.lastIndex = 0;
       if (pattern.regex.test(content)) fail(`${displayPath}: ${pattern.name}로 보이는 값이 있습니다.`);

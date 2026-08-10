@@ -1,9 +1,12 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
+
+const root = fileURLToPath(new URL("../", import.meta.url));
 
 const child = spawn(process.execPath, ["scripts/serve.mjs"], {
-  cwd: new URL("../", import.meta.url),
+  cwd: root,
   env: {
     ...process.env,
     HOST: "127.0.0.1",

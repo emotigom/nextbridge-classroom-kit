@@ -3,8 +3,9 @@ import { access, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, join, normalize, relative, resolve, sep } from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 
-const root = resolve(new URL("../", import.meta.url).pathname);
+const root = resolve(fileURLToPath(new URL("../", import.meta.url)));
 const port = Number(process.env.PORT || 8080);
 const host = process.env.HOST || "127.0.0.1";
 
