@@ -1,17 +1,18 @@
 {
   "schemaVersion": "1.0",
   "id": "program-02",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Nextbridge Program 02 · 이름 확정 예정",
   "publisher": "Nextbridge",
   "summary": "두 번째 교육사업의 수업 자료와 독립 실행 활동이 들어갈 자리입니다.",
   "status": "draft",
   "delivery": {
-    "durationMinutes": 200,
-    "teamSize": 4,
-    "deviceMode": "team",
+    "status": "unconfirmed",
+    "durationMinutes": null,
+    "teamSize": null,
+    "deviceMode": "unconfirmed",
     "offlineCore": true,
-    "gradeBands": ["high"]
+    "gradeBands": []
   },
   "privacy": {
     "piiAllowed": false,
@@ -21,6 +22,6 @@
   "integration": {
     "mode": "standalone",
     "gomCleanEnabled": false,
-    "resultSchemaVersion": "1.0"
+    "resultSchemaVersion": "1.1"
   }
 }

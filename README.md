@@ -6,13 +6,15 @@
 
 ## 현재 상태
 
-> **Foundation / v0.2**  
+> **Foundation / v0.3**  
 > 실제 세 사업의 이름과 교안은 아직 연결하지 않았습니다. `program-01`부터 `program-03`까지는 사업별 콘텐츠가 들어갈 안전한 자리입니다.
 
 - 독립 실행을 기본값으로 사용합니다.
-- `gom-clean` 연동은 아직 구현하지 않았고 명시적으로 비활성화되어 있습니다.
-- 학생 실명·학번·학교명·연락처를 다루지 않습니다.
+- `gom-clean` 연동은 명시적으로 비활성화되어 있습니다.
+- 학생 식별은 실명 대신 팀코드만 사용합니다.
 - 예시는 실제 사람에게서 만들지 않은 합성데이터만 사용합니다.
+- 공통 결과카드는 결과·검증 근거·다음 개선·AI 사용 공개를 기록합니다.
+- 학교급·수업시간·팀구성은 확정 전까지 `unconfirmed`로 두며 임의 값을 넣지 않습니다.
 - 프로그램 정의와 결과카드는 공개 JSON 규격으로 검증합니다.
 - 프로그램 발행 주체는 `Nextbridge`로 통일합니다.
 
@@ -29,16 +31,21 @@
 ├── schemas/
 │   ├── program-manifest.schema.json
 │   └── result-card.schema.json
-├── src/adapters/
-│   ├── standalone.js            # 네트워크 없는 로컬 저장
-│   └── gom-clean.stub.js         # 아직 연결되지 않은 안전한 경계
+├── src/
+│   ├── result-card.js           # 결과카드 런타임 검증과 기본정보 검사
+│   └── adapters/
+│       ├── standalone.js        # 네트워크 없는 로컬 저장
+│       └── gom-clean.stub.js     # 아직 연결되지 않은 안전한 경계
 ├── docs/
+│   ├── result-card-contract.md
+│   ├── instructor-quick-start.md
+│   ├── recovery-card.md
 │   ├── architecture.md
 │   ├── security-boundary.md
 │   ├── gom-clean-integration-contract.md
 │   └── roadmap.md
 ├── config/brand.json             # Nextbridge 브랜드 단일 기준
-└── scripts/                       # 실행 서버와 구조·보안 검사
+└── scripts/                       # 실행 서버와 구조·보안·smoke 검사
 ```
 
 ## 빠르게 확인하기
@@ -50,7 +57,29 @@ npm run check
 npm run dev
 ```
 
-브라우저에서 `http://localhost:8080/`을 엽니다. 프로그램 카드는 `programs/catalog.json`과 각 manifest에서 자동으로 불러옵니다.
+브라우저에서 `http://127.0.0.1:8080/`을 엽니다. `npm run check`는 구조·보안 검사, 단위 테스트, 로컬 서버 smoke test를 순서대로 실행합니다.
+
+## 공통 결과카드 1.1
+
+세 사업에서 공통으로 사용하는 필드는 다음과 같습니다.
+
+- 프로그램 ID와 버전
+- 팀코드
+- 완료 시각
+- 핵심 결과
+- 검증 근거
+- 다음 개선
+- 생성형 AI 사용 여부와 범위
+- 개인정보 최종 확인
+
+정확한 형식과 합성 예시는 [공통 결과카드 계약](docs/result-card-contract.md)에서 확인합니다.
+
+## 수업 운영 안내
+
+- [강사용 3분 시작 안내](docs/instructor-quick-start.md)
+- [오류 복구 카드](docs/recovery-card.md)
+
+브라우저 저장본은 같은 기기·같은 브라우저에서만 불러올 수 있습니다. 수업 종료 전에 필요한 팀만 JSON을 내려받습니다.
 
 ## 두 가지 실행 모드
 
@@ -70,7 +99,8 @@ npm run dev
 2. 학생이 직접 식별되는 정보는 넣지 않습니다.
 3. 실제 사람이 아닌 합성데이터만 예시에 사용합니다.
 4. 네트워크가 없어도 달성할 수 있는 핵심 활동을 둡니다.
-5. `npm run validate`가 통과해야 합니다.
+5. 학생 화면에는 제작도구를 가능한 한 하나만 노출합니다.
+6. `npm run check`가 통과해야 합니다.
 
 ## 라이선스
 

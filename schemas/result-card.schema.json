@@ -12,10 +12,12 @@
     "completedAt",
     "summary",
     "evidence",
+    "nextStep",
+    "aiDisclosure",
     "privacyChecked"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
+    "schemaVersion": { "const": "1.1" },
     "programId": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
@@ -44,8 +46,31 @@
         }
       }
     },
-    "aiDisclosure": { "type": "string", "maxLength": 300 },
+    "nextStep": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "aiDisclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "note"],
+      "properties": {
+        "status": {
+          "enum": ["not-used", "used", "not-applicable"]
+        },
+        "note": { "type": "string", "maxLength": 300 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "used" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "note": { "type": "string", "minLength": 1, "maxLength": 300 }
+            }
+          }
+        }
+      ]
+    },
     "privacyChecked": { "const": true }
   }
 }
-

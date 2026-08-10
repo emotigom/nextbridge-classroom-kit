@@ -11,14 +11,22 @@ test("catalog contains three unique Nextbridge programs", async () => {
   assert.equal(new Set(catalog.programs.map(({ id }) => id)).size, 3);
 });
 
-test("every catalog entry points to a matching manifest", async () => {
+test("every catalog entry points to a matching standalone manifest", async () => {
   const catalogUrl = new URL("programs/catalog.json", root);
   const catalog = JSON.parse(await readFile(catalogUrl, "utf8"));
   for (const entry of catalog.programs) {
     const manifest = JSON.parse(await readFile(new URL(entry.manifest, catalogUrl), "utf8"));
     assert.equal(manifest.id, entry.id);
     assert.equal(manifest.publisher, "Nextbridge");
+    assert.equal(manifest.delivery.status, "unconfirmed");
+    assert.equal(manifest.delivery.durationMinutes, null);
+    assert.equal(manifest.delivery.teamSize, null);
+    assert.equal(manifest.delivery.deviceMode, "unconfirmed");
+    assert.deepEqual(manifest.delivery.gradeBands, []);
+    assert.equal(manifest.delivery.offlineCore, true);
+    assert.equal(manifest.privacy.studentIdentifier, "team-code-only");
+    assert.equal(manifest.integration.mode, "standalone");
     assert.equal(manifest.integration.gomCleanEnabled, false);
+    assert.equal(manifest.integration.resultSchemaVersion, "1.1");
   }
 });
-

@@ -34,18 +34,68 @@
     "delivery": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["durationMinutes", "teamSize", "deviceMode", "offlineCore"],
+      "required": [
+        "status",
+        "durationMinutes",
+        "teamSize",
+        "deviceMode",
+        "offlineCore",
+        "gradeBands"
+      ],
       "properties": {
-        "durationMinutes": { "type": "integer", "minimum": 40, "maximum": 600 },
-        "teamSize": { "type": "integer", "minimum": 1, "maximum": 6 },
-        "deviceMode": { "enum": ["individual", "team", "mixed"] },
+        "status": { "enum": ["unconfirmed", "confirmed"] },
+        "durationMinutes": {
+          "anyOf": [
+            { "type": "integer", "minimum": 40, "maximum": 600 },
+            { "type": "null" }
+          ]
+        },
+        "teamSize": {
+          "anyOf": [
+            { "type": "integer", "minimum": 1, "maximum": 6 },
+            { "type": "null" }
+          ]
+        },
+        "deviceMode": {
+          "enum": ["unconfirmed", "individual", "team", "mixed"]
+        },
         "offlineCore": { "type": "boolean" },
         "gradeBands": {
           "type": "array",
           "items": { "enum": ["elementary", "middle", "high", "teacher"] },
           "uniqueItems": true
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "unconfirmed" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "durationMinutes": { "type": "null" },
+              "teamSize": { "type": "null" },
+              "deviceMode": { "const": "unconfirmed" },
+              "gradeBands": { "maxItems": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "confirmed" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "durationMinutes": { "type": "integer", "minimum": 40, "maximum": 600 },
+              "teamSize": { "type": "integer", "minimum": 1, "maximum": 6 },
+              "deviceMode": { "enum": ["individual", "team", "mixed"] },
+              "gradeBands": { "minItems": 1 }
+            }
+          }
+        }
+      ]
     },
     "privacy": {
       "type": "object",
@@ -64,7 +114,7 @@
       "properties": {
         "mode": { "enum": ["standalone", "optional-gom-clean"] },
         "gomCleanEnabled": { "type": "boolean" },
-        "resultSchemaVersion": { "const": "1.0" }
+        "resultSchemaVersion": { "const": "1.1" }
       }
     }
   }

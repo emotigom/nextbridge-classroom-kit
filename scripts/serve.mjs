@@ -17,7 +17,8 @@ const contentTypes = new Map([
   [".svg", "image/svg+xml"],
   [".png", "image/png"],
   [".jpg", "image/jpeg"],
-  [".jpeg", "image/jpeg"]
+  [".jpeg", "image/jpeg"],
+  [".md", "text/markdown; charset=utf-8"]
 ]);
 
 function safePath(urlPath) {
@@ -67,6 +68,10 @@ const server = createServer(async (request, response) => {
   response.writeHead(200, {
     "content-type": contentTypes.get(extname(file).toLowerCase()) || "application/octet-stream",
     "cache-control": "no-store",
+    "content-security-policy":
+      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "referrer-policy": "no-referrer",
     "x-content-type-options": "nosniff"
   });
   if (request.method === "HEAD") {
@@ -77,6 +82,7 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`Nextbridge Classroom Kit: http://${host}:${port}/`);
+  const address = server.address();
+  const actualPort = typeof address === "object" && address ? address.port : port;
+  console.log(`Nextbridge Classroom Kit: http://${host}:${actualPort}/`);
 });
-
