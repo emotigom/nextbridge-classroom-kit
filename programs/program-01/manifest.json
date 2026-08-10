@@ -1,34 +1,8 @@
 {
-  "schemaVersion": "1.1",
   "id": "program-01",
-  "version": "0.5.0",
   "title": "학교 AI 수업",
   "publisher": "Nextbridge",
-  "kind": "school-program",
-  "summary": "학교에서 사용할 수 있는 AI 수업입니다. 현재 로그인 없이 실행되는 간단한 기준 비교 실습을 제공합니다.",
-  "status": "draft",
-  "delivery": {
-    "status": "unconfirmed",
-    "durationMinutes": null,
-    "teamSize": null,
-    "deviceMode": "unconfirmed",
-    "offlineCore": true,
-    "gradeBands": []
-  },
-  "resources": {
-    "status": "published",
-    "studentTool": "./tool/index.html",
-    "instructorGuide": "./instructor-guide.md",
-    "lessonMaterial": null
-  },
-  "privacy": {
-    "piiAllowed": false,
-    "syntheticDataOnly": true,
-    "studentIdentifier": "team-code-only"
-  },
-  "integration": {
-    "mode": "standalone",
-    "gomCleanEnabled": false,
-    "resultSchemaVersion": "1.1"
-  }
+  "status": "planning",
+  "summary": "학교 수업 자료와 실습을 연결할 자리입니다.",
+  "resources": []
 }

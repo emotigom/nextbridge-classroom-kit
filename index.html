@@ -3,11 +3,64 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content="0; url=./demo/" />
+    <meta name="description" content="Nextbridge Classroom Kit" />
     <title>Nextbridge Classroom Kit</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #16324a;
+        background: #f5f8fb;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 72px 0; }
+      .eyebrow { color: #1769a7; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.12em; }
+      h1 { max-width: 760px; margin: 12px 0; font-size: clamp(2.4rem, 7vw, 4.8rem); line-height: 1.05; letter-spacing: -0.05em; }
+      .lead { max-width: 680px; color: #587083; font-size: 1.06rem; line-height: 1.75; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
+      article { padding: 24px; border: 1px solid #d7e1e9; border-radius: 18px; background: white; }
+      article span { color: #1769a7; font-size: 0.8rem; font-weight: 850; }
+      article h2 { margin: 24px 0 8px; font-size: 1.2rem; }
+      article p { margin: 0; color: #64798a; line-height: 1.6; }
+      .note { margin-top: 18px; padding: 18px 20px; border-radius: 14px; color: #5d5017; background: #fff4c9; line-height: 1.65; }
+      footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #d7e1e9; color: #6c7d8b; font-size: 0.86rem; }
+      @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    </style>
   </head>
   <body>
-    <p><a href="./demo/">Nextbridge Classroom Kit 데모 열기</a></p>
+    <main>
+      <p class="eyebrow">NEXTBRIDGE CLASSROOM KIT</p>
+      <h1>수업 자료를 담기 위한 가벼운 공개 저장소</h1>
+      <p class="lead">
+        지금은 기능을 많이 켜두지 않습니다. 필요한 수업이 정해지면 아래 프로그램 자리에
+        교안과 실습 자료를 하나씩 연결합니다.
+      </p>
+
+      <section class="grid" aria-label="프로그램 자리">
+        <article>
+          <span>PROGRAM 01</span>
+          <h2>학교 AI 수업</h2>
+          <p>수업 자료를 연결할 자리입니다.</p>
+        </article>
+        <article>
+          <span>PROGRAM 02</span>
+          <h2>전환기 AI·SW 수업</h2>
+          <p>수업 자료를 연결할 자리입니다.</p>
+        </article>
+        <article>
+          <span>PROGRAM 03</span>
+          <h2>교육 도구 워크숍</h2>
+          <p>수업 자료를 연결할 자리입니다.</p>
+        </article>
+      </section>
+
+      <p class="note">
+        이전에 만든 결과카드·데모·실습도구는 Git 이력에 보관되어 있습니다.
+        지금 수업에 필요한 기능이 확인되면 필요한 부분만 다시 꺼내 사용합니다.
+      </p>
+
+      <footer>Nextbridge · 공개 자료에는 실제 학생·학교 데이터와 비밀정보를 넣지 않습니다.</footer>
+    </main>
   </body>
 </html>
-

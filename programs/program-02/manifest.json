@@ -1,34 +1,8 @@
 {
-  "schemaVersion": "1.1",
   "id": "program-02",
-  "version": "0.4.0",
   "title": "전환기 AI·SW 수업",
   "publisher": "Nextbridge",
-  "kind": "school-program",
-  "summary": "학교급 전환기에 활용할 수 있는 AI·SW 수업입니다. 세부 자료는 준비되는 순서대로 연결합니다.",
-  "status": "draft",
-  "delivery": {
-    "status": "unconfirmed",
-    "durationMinutes": null,
-    "teamSize": null,
-    "deviceMode": "unconfirmed",
-    "offlineCore": true,
-    "gradeBands": []
-  },
-  "resources": {
-    "status": "not-started",
-    "studentTool": null,
-    "instructorGuide": null,
-    "lessonMaterial": null
-  },
-  "privacy": {
-    "piiAllowed": false,
-    "syntheticDataOnly": true,
-    "studentIdentifier": "team-code-only"
-  },
-  "integration": {
-    "mode": "standalone",
-    "gomCleanEnabled": false,
-    "resultSchemaVersion": "1.1"
-  }
+  "status": "planning",
+  "summary": "전환기 학생을 위한 수업 자료를 연결할 자리입니다.",
+  "resources": []
 }

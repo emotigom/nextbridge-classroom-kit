@@ -1,34 +1,8 @@
 {
-  "schemaVersion": "1.1",
   "id": "program-03",
-  "version": "0.4.0",
   "title": "교육 도구 워크숍",
   "publisher": "Nextbridge",
-  "kind": "workshop",
-  "summary": "교육용 도구를 함께 살펴보고 만드는 워크숍입니다. 공개 자료는 준비되는 범위에서 연결합니다.",
-  "status": "draft",
-  "delivery": {
-    "status": "unconfirmed",
-    "durationMinutes": null,
-    "teamSize": null,
-    "deviceMode": "unconfirmed",
-    "offlineCore": true,
-    "gradeBands": []
-  },
-  "resources": {
-    "status": "not-started",
-    "studentTool": null,
-    "instructorGuide": null,
-    "lessonMaterial": null
-  },
-  "privacy": {
-    "piiAllowed": false,
-    "syntheticDataOnly": true,
-    "studentIdentifier": "team-code-only"
-  },
-  "integration": {
-    "mode": "standalone",
-    "gomCleanEnabled": false,
-    "resultSchemaVersion": "1.1"
-  }
+  "status": "planning",
+  "summary": "워크숍 자료와 도구를 연결할 자리입니다.",
+  "resources": []
 }
