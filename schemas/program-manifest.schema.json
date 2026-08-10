@@ -10,13 +10,18 @@
     "version",
     "title",
     "publisher",
+    "kind",
+    "summary",
     "status",
     "delivery",
+    "resources",
     "privacy",
     "integration"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
+    "schemaVersion": {
+      "const": "1.1"
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
@@ -25,11 +30,32 @@
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$"
     },
-    "title": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "publisher": { "const": "Nextbridge" },
-    "summary": { "type": "string", "maxLength": 240 },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "publisher": {
+      "const": "Nextbridge"
+    },
+    "kind": {
+      "enum": [
+        "school-program",
+        "workshop"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
     "status": {
-      "enum": ["draft", "pilot", "stable", "retired"]
+      "enum": [
+        "draft",
+        "pilot",
+        "stable",
+        "retired"
+      ]
     },
     "delivery": {
       "type": "object",
@@ -43,56 +69,294 @@
         "gradeBands"
       ],
       "properties": {
-        "status": { "enum": ["unconfirmed", "confirmed"] },
+        "status": {
+          "enum": [
+            "unconfirmed",
+            "partial",
+            "confirmed"
+          ]
+        },
         "durationMinutes": {
           "anyOf": [
-            { "type": "integer", "minimum": 40, "maximum": 600 },
-            { "type": "null" }
+            {
+              "type": "integer",
+              "minimum": 40,
+              "maximum": 600
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "teamSize": {
           "anyOf": [
-            { "type": "integer", "minimum": 1, "maximum": 6 },
-            { "type": "null" }
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "deviceMode": {
-          "enum": ["unconfirmed", "individual", "team", "mixed"]
+          "enum": [
+            "unconfirmed",
+            "individual",
+            "team",
+            "mixed"
+          ]
         },
-        "offlineCore": { "type": "boolean" },
+        "offlineCore": {
+          "type": "boolean"
+        },
         "gradeBands": {
           "type": "array",
-          "items": { "enum": ["elementary", "middle", "high", "teacher"] },
+          "items": {
+            "enum": [
+              "elementary",
+              "middle",
+              "high",
+              "teacher"
+            ]
+          },
           "uniqueItems": true
         }
       },
       "allOf": [
         {
           "if": {
-            "properties": { "status": { "const": "unconfirmed" } },
-            "required": ["status"]
+            "properties": {
+              "status": {
+                "const": "unconfirmed"
+              }
+            },
+            "required": [
+              "status"
+            ]
           },
           "then": {
             "properties": {
-              "durationMinutes": { "type": "null" },
-              "teamSize": { "type": "null" },
-              "deviceMode": { "const": "unconfirmed" },
-              "gradeBands": { "maxItems": 0 }
+              "durationMinutes": {
+                "type": "null"
+              },
+              "teamSize": {
+                "type": "null"
+              },
+              "deviceMode": {
+                "const": "unconfirmed"
+              },
+              "gradeBands": {
+                "maxItems": 0
+              }
             }
           }
         },
         {
           "if": {
-            "properties": { "status": { "const": "confirmed" } },
-            "required": ["status"]
+            "properties": {
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "properties": {
+                  "durationMinutes": {
+                    "type": "integer"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "teamSize": {
+                    "type": "integer"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "deviceMode": {
+                    "enum": [
+                      "individual",
+                      "team",
+                      "mixed"
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "gradeBands": {
+                    "minItems": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "confirmed"
+              }
+            },
+            "required": [
+              "status"
+            ]
           },
           "then": {
             "properties": {
-              "durationMinutes": { "type": "integer", "minimum": 40, "maximum": 600 },
-              "teamSize": { "type": "integer", "minimum": 1, "maximum": 6 },
-              "deviceMode": { "enum": ["individual", "team", "mixed"] },
-              "gradeBands": { "minItems": 1 }
+              "durationMinutes": {
+                "type": "integer",
+                "minimum": 40,
+                "maximum": 600
+              },
+              "teamSize": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 6
+              },
+              "deviceMode": {
+                "enum": [
+                  "individual",
+                  "team",
+                  "mixed"
+                ]
+              },
+              "gradeBands": {
+                "minItems": 1
+              }
             }
+          }
+        }
+      ]
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "studentTool",
+        "instructorGuide",
+        "lessonMaterial"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not-started",
+            "pending-review",
+            "published"
+          ]
+        },
+        "studentTool": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\./",
+              "maxLength": 240
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "instructorGuide": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\./",
+              "maxLength": 240
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lessonMaterial": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\./",
+              "maxLength": 240
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "not-started",
+                  "pending-review"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "studentTool": {
+                "type": "null"
+              },
+              "instructorGuide": {
+                "type": "null"
+              },
+              "lessonMaterial": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "published"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "properties": {
+                  "studentTool": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "instructorGuide": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "lessonMaterial": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
           }
         }
       ]
@@ -100,21 +364,44 @@
     "privacy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["piiAllowed", "syntheticDataOnly"],
+      "required": [
+        "piiAllowed",
+        "syntheticDataOnly",
+        "studentIdentifier"
+      ],
       "properties": {
-        "piiAllowed": { "const": false },
-        "syntheticDataOnly": { "const": true },
-        "studentIdentifier": { "const": "team-code-only" }
+        "piiAllowed": {
+          "const": false
+        },
+        "syntheticDataOnly": {
+          "const": true
+        },
+        "studentIdentifier": {
+          "const": "team-code-only"
+        }
       }
     },
     "integration": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["mode", "gomCleanEnabled", "resultSchemaVersion"],
+      "required": [
+        "mode",
+        "gomCleanEnabled",
+        "resultSchemaVersion"
+      ],
       "properties": {
-        "mode": { "enum": ["standalone", "optional-gom-clean"] },
-        "gomCleanEnabled": { "type": "boolean" },
-        "resultSchemaVersion": { "const": "1.1" }
+        "mode": {
+          "enum": [
+            "standalone",
+            "optional-gom-clean"
+          ]
+        },
+        "gomCleanEnabled": {
+          "type": "boolean"
+        },
+        "resultSchemaVersion": {
+          "const": "1.1"
+        }
       }
     }
   }

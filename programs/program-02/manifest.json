@@ -1,18 +1,28 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "id": "program-02",
-  "version": "0.2.0",
-  "title": "Nextbridge Program 02 · 이름 확정 예정",
+  "version": "0.3.0",
+  "title": "2026 중등 학교급 전환기 찾아가는 AI·SW 프로그램",
   "publisher": "Nextbridge",
-  "summary": "두 번째 교육사업의 수업 자료와 독립 실행 활동이 들어갈 자리입니다.",
+  "kind": "school-program",
+  "summary": "중학교 3학년과 고등학교 3학년을 위한 찾아가는 AI·SW 프로그램입니다. 차시·활동·사용 도구는 아직 확정 전입니다.",
   "status": "draft",
   "delivery": {
-    "status": "unconfirmed",
+    "status": "partial",
     "durationMinutes": null,
     "teamSize": null,
     "deviceMode": "unconfirmed",
     "offlineCore": true,
-    "gradeBands": []
+    "gradeBands": [
+      "middle",
+      "high"
+    ]
+  },
+  "resources": {
+    "status": "not-started",
+    "studentTool": null,
+    "instructorGuide": null,
+    "lessonMaterial": null
   },
   "privacy": {
     "piiAllowed": false,

@@ -1,10 +1,11 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "id": "program-03",
-  "version": "0.2.0",
-  "title": "Nextbridge Program 03 · 이름 확정 예정",
+  "version": "0.3.0",
+  "title": "2026 경기 성취도평가 표준화 평가도구 개발 합숙 워크숍",
   "publisher": "Nextbridge",
-  "summary": "세 번째 교육사업의 수업 자료와 독립 실행 활동이 들어갈 자리입니다.",
+  "kind": "workshop",
+  "summary": "경기 성취도평가 표준화 평가도구 개발을 위한 3일 합숙 워크숍입니다. 공개 키트에서 제공할 실행 자료 범위는 아직 검토 중입니다.",
   "status": "draft",
   "delivery": {
     "status": "unconfirmed",
@@ -13,6 +14,12 @@
     "deviceMode": "unconfirmed",
     "offlineCore": true,
     "gradeBands": []
+  },
+  "resources": {
+    "status": "not-started",
+    "studentTool": null,
+    "instructorGuide": null,
+    "lessonMaterial": null
   },
   "privacy": {
     "piiAllowed": false,

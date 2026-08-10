@@ -48,7 +48,14 @@ async function serverUrl() {
 
 try {
   const baseUrl = await serverUrl();
-  const routes = ["/", "/demo/", "/programs/catalog.json", "/schemas/result-card.schema.json"];
+  const routes = [
+    "/",
+    "/demo/",
+    "/programs/catalog.json",
+    "/programs/program-01/manifest.json",
+    "/schemas/result-card.schema.json",
+    "/docs/program-status.md"
+  ];
 
   for (const route of routes) {
     const response = await fetch(`${baseUrl}${route}`);
@@ -59,10 +66,19 @@ try {
   const demo = await (await fetch(`${baseUrl}/demo/`)).text();
   assert.match(demo, /id="result-form"/);
   assert.match(demo, /강사용 3분 시작/);
+  assert.match(demo, /현재 준비 중인 세 사업/);
+  assert.doesNotMatch(demo, /실제 사업명은 아직 확정하지 않았습니다/);
 
   const catalog = await (await fetch(`${baseUrl}/programs/catalog.json`)).json();
   assert.equal(catalog.publisher, "Nextbridge");
   assert.equal(catalog.programs.length, 3);
+
+  const firstProgram = await (
+    await fetch(`${baseUrl}/programs/program-01/manifest.json`)
+  ).json();
+  assert.equal(firstProgram.title, "2026 찾아가는 AI교육 지원 프로그램");
+  assert.equal(firstProgram.delivery.status, "partial");
+  assert.equal(firstProgram.resources.status, "pending-review");
 
   console.log("Standalone smoke passed.");
 } finally {

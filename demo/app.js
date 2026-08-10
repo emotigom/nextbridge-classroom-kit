@@ -16,6 +16,31 @@ const downloadButton = document.querySelector("#download");
 const removeButton = document.querySelector("#remove");
 const message = document.querySelector("#message");
 
+const gradeLabels = {
+  elementary: "초등",
+  middle: "중등",
+  high: "고등",
+  teacher: "교원"
+};
+
+const kindLabels = {
+  "school-program": "학교 대상 프로그램",
+  workshop: "워크숍"
+};
+
+const programStatusLabels = {
+  draft: "준비 중",
+  pilot: "파일럿",
+  stable: "운영 가능",
+  retired: "종료"
+};
+
+const resourceStatusLabels = {
+  "not-started": "공개 자료 준비 전",
+  "pending-review": "공개 범위 검토 중",
+  published: "공개 자료 연결됨"
+};
+
 let adapter = null;
 let programs = [];
 let latestResult = null;
@@ -109,9 +134,30 @@ async function loadPrograms() {
       if (manifest.integration.gomCleanEnabled !== false) {
         throw new Error(`${entry.id}의 비활성 연동 상태를 확인할 수 없습니다.`);
       }
+      if (!resourceStatusLabels[manifest.resources?.status]) {
+        throw new Error(`${entry.id}의 공개 자료 상태를 확인할 수 없습니다.`);
+      }
       return manifest;
     })
   );
+}
+
+function deliveryMeta(program) {
+  const grades = Array.isArray(program.delivery.gradeBands)
+    ? program.delivery.gradeBands.map((grade) => gradeLabels[grade]).filter(Boolean)
+    : [];
+
+  const audience = grades.length ? `대상: ${grades.join("·")}` : "대상 세부 미확정";
+  const duration = Number.isInteger(program.delivery.durationMinutes)
+    ? `수업시간: ${program.delivery.durationMinutes}분`
+    : "수업시간 미확정";
+
+  return [
+    kindLabels[program.kind] || "교육 프로그램",
+    audience,
+    duration,
+    resourceStatusLabels[program.resources.status]
+  ];
 }
 
 function renderPrograms() {
@@ -131,11 +177,20 @@ function renderPrograms() {
     title.textContent = program.title;
     const summary = document.createElement("p");
     summary.textContent = program.summary;
-    content.append(title, summary);
+
+    const meta = document.createElement("ul");
+    meta.className = "program-meta";
+    for (const text of deliveryMeta(program)) {
+      const item = document.createElement("li");
+      item.textContent = text;
+      meta.append(item);
+    }
+
+    content.append(title, summary, meta);
 
     const status = document.createElement("span");
     status.className = "draft";
-    status.textContent = program.status.toUpperCase();
+    status.textContent = programStatusLabels[program.status] || program.status;
 
     article.append(number, content, status);
     list.append(article);
