@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://classroom-kit.nextbridge.example/schemas/program-manifest.schema.json",
+  "title": "Nextbridge Classroom Program Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "title",
+    "status",
+    "delivery",
+    "privacy",
+    "integration"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "summary": { "type": "string", "maxLength": 240 },
+    "status": {
+      "enum": ["draft", "pilot", "stable", "retired"]
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["durationMinutes", "teamSize", "deviceMode", "offlineCore"],
+      "properties": {
+        "durationMinutes": { "type": "integer", "minimum": 40, "maximum": 600 },
+        "teamSize": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "deviceMode": { "enum": ["individual", "team", "mixed"] },
+        "offlineCore": { "type": "boolean" },
+        "gradeBands": {
+          "type": "array",
+          "items": { "enum": ["elementary", "middle", "high", "teacher"] },
+          "uniqueItems": true
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["piiAllowed", "syntheticDataOnly"],
+      "properties": {
+        "piiAllowed": { "const": false },
+        "syntheticDataOnly": { "const": true },
+        "studentIdentifier": { "const": "team-code-only" }
+      }
+    },
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "gomCleanEnabled", "resultSchemaVersion"],
+      "properties": {
+        "mode": { "enum": ["standalone", "optional-gom-clean"] },
+        "gomCleanEnabled": { "type": "boolean" },
+        "resultSchemaVersion": { "const": "1.0" }
+      }
+    }
+  }
+}
+

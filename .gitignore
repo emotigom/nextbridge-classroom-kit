@@ -1,0 +1,19 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log
+
+# Local secrets and deployment state
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+.wrangler/
+
+# Student or school exports must never be committed.
+exports/
+submissions/
+school-data/
+

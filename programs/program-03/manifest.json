@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "id": "program-03",
+  "version": "0.1.0",
+  "title": "사업 3 · 이름 확정 예정",
+  "summary": "세 번째 교육사업의 수업 자료와 독립 실행 활동이 들어갈 자리입니다.",
+  "status": "draft",
+  "delivery": {
+    "durationMinutes": 200,
+    "teamSize": 4,
+    "deviceMode": "team",
+    "offlineCore": true,
+    "gradeBands": ["high"]
+  },
+  "privacy": {
+    "piiAllowed": false,
+    "syntheticDataOnly": true,
+    "studentIdentifier": "team-code-only"
+  },
+  "integration": {
+    "mode": "standalone",
+    "gomCleanEnabled": false,
+    "resultSchemaVersion": "1.0"
+  }
+}
+
