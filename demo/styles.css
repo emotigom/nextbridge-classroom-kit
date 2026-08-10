@@ -37,6 +37,7 @@ h2 { margin: 6px 0 0; font-size: clamp(1.7rem, 3vw, 2.5rem); letter-spacing: -0.
 .status { padding: 8px 12px; color: #854d0e; background: #fff4cc; }
 
 .program-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.load-error { grid-column: 1 / -1; padding: 24px; border: 1px solid #f1c3c3; border-radius: 16px; color: #8a2f2f; background: #fff1f1; }
 .program-card { position: relative; min-height: 230px; display: flex; flex-direction: column; justify-content: space-between; padding: 24px; border: 1px solid var(--line); border-radius: 22px; background: var(--paper); box-shadow: 0 14px 35px rgba(13, 41, 69, 0.06); }
 .number { color: var(--blue); font-size: 0.9rem; font-weight: 900; }
 .program-card h3 { margin: 0 0 10px; font-size: 1.28rem; }
@@ -73,4 +74,3 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
   form { grid-template-columns: 1fr; }
   .wide { grid-column: 1; }
 }
-
