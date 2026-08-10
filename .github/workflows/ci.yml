@@ -19,5 +19,4 @@ jobs:
         with:
           node-version: 20
       - name: Validate repository contracts
-        run: npm run validate
-
+        run: npm run check

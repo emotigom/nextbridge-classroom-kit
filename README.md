@@ -1,12 +1,12 @@
 # Nextbridge Classroom Kit
 
-넥스트브릿지의 여러 교육사업에서 함께 사용할 수 있는 공개형 수업 실행 키트입니다.
+**Nextbridge**의 여러 교육사업에서 함께 사용할 수 있는 공개형 수업 실행 키트입니다.
 
 이 저장소의 목표는 강사와 학교가 복잡한 설치나 유료 계정 없이도 수업 자료를 확인하고, 합성데이터로 실습하고, 최소정보 결과카드를 남길 수 있게 하는 것입니다. 실제 학교·학생 데이터와 운영 비밀정보는 이 저장소에 두지 않습니다.
 
 ## 현재 상태
 
-> **Foundation / v0.1**  
+> **Foundation / v0.2**  
 > 실제 세 사업의 이름과 교안은 아직 연결하지 않았습니다. `program-01`부터 `program-03`까지는 사업별 콘텐츠가 들어갈 안전한 자리입니다.
 
 - 독립 실행을 기본값으로 사용합니다.
@@ -14,6 +14,7 @@
 - 학생 실명·학번·학교명·연락처를 다루지 않습니다.
 - 예시는 실제 사람에게서 만들지 않은 합성데이터만 사용합니다.
 - 프로그램 정의와 결과카드는 공개 JSON 규격으로 검증합니다.
+- 프로그램 발행 주체는 `Nextbridge`로 통일합니다.
 
 ## 저장소 구조
 
@@ -21,6 +22,7 @@
 .
 ├── demo/                         # 브라우저에서 확인하는 독립 실행 데모
 ├── programs/
+│   ├── catalog.json             # 프로그램 목록의 단일 진입점
 │   ├── program-01/manifest.json # 세 사업의 임시 자리
 │   ├── program-02/manifest.json
 │   └── program-03/manifest.json
@@ -33,20 +35,22 @@
 ├── docs/
 │   ├── architecture.md
 │   ├── security-boundary.md
-│   └── gom-clean-integration-contract.md
-└── scripts/validate.mjs          # 구조·개인정보·비밀정보 검사
+│   ├── gom-clean-integration-contract.md
+│   └── roadmap.md
+├── config/brand.json             # Nextbridge 브랜드 단일 기준
+└── scripts/                       # 실행 서버와 구조·보안 검사
 ```
 
 ## 빠르게 확인하기
 
-별도 패키지 설치 없이 사용할 수 있습니다.
+별도 패키지 설치 없이 사용할 수 있습니다. Node.js 20 이상에서 다음 명령을 실행합니다.
 
 ```bash
-npm run validate
-python3 -m http.server 8080
+npm run check
+npm run dev
 ```
 
-브라우저에서 `http://localhost:8080/demo/`를 엽니다.
+브라우저에서 `http://localhost:8080/`을 엽니다. 프로그램 카드는 `programs/catalog.json`과 각 manifest에서 자동으로 불러옵니다.
 
 ## 두 가지 실행 모드
 
@@ -73,4 +77,3 @@ python3 -m http.server 8080
 이 저장소의 소프트웨어는 [MIT License](LICENSE)를 따릅니다.
 
 교안·상표·외부 이미지처럼 코드와 성격이 다른 콘텐츠를 추가할 때는 공개 범위와 권리관계를 별도로 검토합니다.
-

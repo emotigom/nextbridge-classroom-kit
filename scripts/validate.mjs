@@ -5,12 +5,12 @@ import process from "node:process";
 const root = new URL("../", import.meta.url);
 const errors = [];
 
-const programIds = ["program-01", "program-02", "program-03"];
 const requiredManifestKeys = [
   "schemaVersion",
   "id",
   "version",
   "title",
+  "publisher",
   "status",
   "delivery",
   "privacy",
@@ -24,6 +24,22 @@ function fail(message) {
 function isSemver(value) {
   return /^\d+\.\d+\.\d+$/.test(value);
 }
+
+let brand;
+let catalog;
+try {
+  brand = JSON.parse(await readFile(new URL("config/brand.json", root), "utf8"));
+  catalog = JSON.parse(await readFile(new URL("programs/catalog.json", root), "utf8"));
+} catch (error) {
+  fail(`브랜드 또는 프로그램 목록을 읽을 수 없습니다. ${error.message}`);
+}
+
+if (brand?.name !== "Nextbridge") fail("config/brand.json의 name은 Nextbridge여야 합니다.");
+if (catalog?.publisher !== brand?.name) fail("catalog publisher와 brand name이 일치해야 합니다.");
+
+const programIds = catalog?.programs?.map(({ id }) => id) ?? [];
+if (programIds.length !== 3) fail("현재 foundation에는 프로그램 세 개가 있어야 합니다.");
+if (new Set(programIds).size !== programIds.length) fail("catalog에 중복 프로그램 ID가 있습니다.");
 
 for (const programId of programIds) {
   const path = new URL(`programs/${programId}/manifest.json`, root);
@@ -41,6 +57,7 @@ for (const programId of programIds) {
   if (manifest.schemaVersion !== "1.0") fail(`${programId}: schemaVersion은 1.0이어야 합니다.`);
   if (manifest.id !== programId) fail(`${programId}: 폴더명과 manifest id가 다릅니다.`);
   if (!isSemver(manifest.version)) fail(`${programId}: version은 x.y.z 형식이어야 합니다.`);
+  if (manifest.publisher !== brand?.name) fail(`${programId}: publisher는 Nextbridge여야 합니다.`);
   if (manifest.privacy?.piiAllowed !== false) fail(`${programId}: piiAllowed는 false여야 합니다.`);
   if (manifest.privacy?.syntheticDataOnly !== true) fail(`${programId}: syntheticDataOnly는 true여야 합니다.`);
   if (manifest.delivery?.offlineCore !== true) fail(`${programId}: foundation 단계에서는 offlineCore가 true여야 합니다.`);
@@ -93,9 +110,9 @@ if (errors.length) {
 }
 
 console.log("Validation passed.");
+console.log(`- publisher: ${brand.name}`);
 console.log(`- ${programIds.length} program manifests`);
 console.log("- 2 JSON schemas");
 console.log("- privacy defaults locked");
 console.log("- gom-clean integration disabled");
 console.log("- no secret-like values detected");
-

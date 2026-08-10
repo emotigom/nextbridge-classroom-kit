@@ -9,6 +9,7 @@
     "id",
     "version",
     "title",
+    "publisher",
     "status",
     "delivery",
     "privacy",
@@ -25,6 +26,7 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$"
     },
     "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "publisher": { "const": "Nextbridge" },
     "summary": { "type": "string", "maxLength": 240 },
     "status": {
       "enum": ["draft", "pilot", "stable", "retired"]
@@ -67,4 +69,3 @@
     }
   }
 }
-
