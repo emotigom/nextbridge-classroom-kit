@@ -91,3 +91,10 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
   form { grid-template-columns: 1fr; }
   .wide { grid-column: 1; }
 }
+
+.program-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.program-link { display: inline-flex; align-items: center; justify-content: center; padding: 9px 11px; border-radius: 10px; font-size: 0.8rem; font-weight: 850; text-decoration: none; }
+.program-link.primary { color: white; background: var(--blue); }
+.program-link.primary:hover { background: #0a568f; }
+.program-link.secondary { color: var(--blue); border: 1px solid #a9cbe4; background: #f1f8fd; }
+.program-link.secondary:hover { background: #e5f2fb; }

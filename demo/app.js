@@ -137,6 +137,10 @@ async function loadPrograms() {
       if (!resourceStatusLabels[manifest.resources?.status]) {
         throw new Error(`${entry.id}의 공개 자료 상태를 확인할 수 없습니다.`);
       }
+      Object.defineProperty(manifest, "_resourceBaseUrl", {
+        value: new URL("./", manifestUrl),
+        enumerable: false
+      });
       return manifest;
     })
   );
@@ -187,6 +191,24 @@ function renderPrograms() {
     }
 
     content.append(title, summary, meta);
+
+    const actions = document.createElement("div");
+    actions.className = "program-actions";
+    const resourceLinks = [
+      [program.resources.studentTool, "실습 도구 열기", "primary"],
+      [program.resources.instructorGuide, "강사 안내 보기", "secondary"]
+    ];
+    for (const [path, label, tone] of resourceLinks) {
+      if (!path) continue;
+      const link = document.createElement("a");
+      link.className = `program-link ${tone}`;
+      link.href = new URL(path, program._resourceBaseUrl).href;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = label;
+      actions.append(link);
+    }
+    if (actions.childElementCount) content.append(actions);
 
     const status = document.createElement("span");
     status.className = "draft";

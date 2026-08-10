@@ -13,6 +13,17 @@ const textExtensions = new Set([
   ".js", ".mjs", ".cjs", ".ts", ".tsx", ".jsx", ".json", ".md",
   ".txt", ".html", ".css", ".yml", ".yaml", ".toml", ".xml"
 ]);
+const toolNetworkMarkers = [
+  "fetch(",
+  "XMLHttpRequest",
+  "WebSocket",
+  "EventSource",
+  "sendBeacon",
+  "http://",
+  "https://",
+  "<iframe"
+];
+
 const fixedMarkers = [
   ["-----BEGIN ", "PRIVATE KEY-----"].join(""),
   ["-----BEGIN RSA ", "PRIVATE KEY-----"].join(""),
@@ -85,6 +96,15 @@ export async function validateSecurity(root, fail) {
 
       const content = await readFile(url, "utf8");
       const path = relative(rootPath, fileURLToPath(url));
+      const normalizedPath = path.split(String.fromCharCode(92)).join("/");
+      const isPublishedToolSource = /^programs\/[^/]+\/tool\/.*\.(?:html|js|css)$/.test(normalizedPath);
+      if (isPublishedToolSource) {
+        for (const marker of toolNetworkMarkers) {
+          if (content.includes(marker)) {
+            fail(`${path}: 독립 실행 도구에서 외부 네트워크 기능을 사용할 수 없습니다. ${marker}`);
+          }
+        }
+      }
       if (fixedMarkers.some((marker) => content.includes(marker))) {
         fail(`${path}: 비밀정보 할당 또는 개인키로 보이는 값이 있습니다.`);
       }

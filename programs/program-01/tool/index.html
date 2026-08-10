@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Nextbridge AI 공정성 감사관 수업용 규칙 시뮬레이터" />
+    <title>AI 공정성 감사관 · Nextbridge</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="brand">NEXTBRIDGE · PROGRAM 01</p>
+        <h1>AI 공정성 감사관</h1>
+        <p class="subtitle">가중치와 사람 확인 규칙을 바꾸고, 결과가 누구에게 어떻게 달라지는지 검증해봅시다.</p>
+      </div>
+      <div class="truth-card">
+        <strong>이 도구의 정체</strong>
+        <p>실제 AI 모델이 아닙니다. 다섯 입력을 가중합하는 <b>수업용 규칙 시뮬레이터</b>이며, 모든 사례는 새로 만든 합성데이터입니다.</p>
+      </div>
+    </header>
+
+    <main>
+      <section class="notice" aria-label="개인정보 안내">
+        <strong>실명·학교명·학번을 입력하지 않습니다.</strong>
+        <span>팀 식별은 영문 대문자·숫자·하이픈으로 만든 팀코드만 사용합니다. 네트워크 요청은 발생하지 않습니다.</span>
+      </section>
+
+      <div class="layout">
+        <aside class="controls" aria-label="기준 설정">
+          <section class="panel">
+            <p class="step">1 · 기준을 비교해볼까요?</p>
+            <h2>준비된 기준</h2>
+            <div id="preset-buttons" class="preset-list"></div>
+          </section>
+
+          <section class="panel">
+            <p class="step">2 · 무엇을 중요하게 볼까요?</p>
+            <h2>가중치</h2>
+            <div id="weight-inputs" class="field-list"></div>
+            <div id="weight-sum" class="sum" role="status"></div>
+
+            <label class="field">
+              <span>우선안내 기준 점수</span>
+              <input id="threshold" type="number" min="0" max="100" step="1" />
+            </label>
+            <label class="field">
+              <span>경계 점수 사람 확인 범위(±점)</span>
+              <input id="review-band" type="number" min="0" max="20" step="1" />
+            </label>
+            <label class="check">
+              <input id="review-missing" type="checkbox" />
+              <span>값이 비어 있으면 자동 확정하지 않고 사람이 확인합니다.</span>
+            </label>
+            <div class="button-row">
+              <button id="reset-preset" class="secondary" type="button">현재 기준 다시 불러오기</button>
+              <button id="reset-all" class="danger" type="button">전체 초기화</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <p class="step">3 · 한 사례만 바꿔볼까요?</p>
+            <h2>선택 사례 실험</h2>
+            <label class="field">
+              <span>사례 ID</span>
+              <select id="case-select"></select>
+            </label>
+            <div id="case-inputs" class="field-list"></div>
+            <button id="reset-case" class="secondary wide" type="button">이 사례만 원래 값으로</button>
+          </section>
+        </aside>
+
+        <div class="workspace">
+          <section class="stats" aria-label="결과 요약">
+            <article><span>우선안내</span><strong id="priority-count">0건</strong></article>
+            <article><span>사람 확인</span><strong id="review-count">0건</strong></article>
+            <article><span>v0와 달라진 사례</span><strong id="changed-count">0건</strong></article>
+            <article><span>현재 기준</span><strong id="current-rule">v0</strong></article>
+          </section>
+
+          <section class="panel results-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="step">결과</p>
+                <h2>같은 사례, 다른 결정</h2>
+              </div>
+              <p id="comparison-summary" class="comparison"></p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">사례</th>
+                    <th scope="col">D</th>
+                    <th scope="col">S</th>
+                    <th scope="col">N</th>
+                    <th scope="col">T</th>
+                    <th scope="col">C</th>
+                    <th scope="col">점수</th>
+                    <th scope="col">계산 결과</th>
+                    <th scope="col">실제 처리</th>
+                  </tr>
+                </thead>
+                <tbody id="result-body"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <p class="step">4 · 일부러 실패시켜볼까요?</p>
+            <h2>세 가지 검증</h2>
+            <p class="explain">평범한 사례, 기준점수 근처 사례, 빈칸 사례를 각각 실행하고 자동 확정해도 되는지 확인합니다.</p>
+            <div class="test-grid">
+              <article>
+                <h3>정상 사례 S09</h3>
+                <p>입력이 모두 있고 기준점수에서 충분히 떨어진 사례입니다.</p>
+                <button data-test="normal" type="button">정상 테스트 실행</button>
+                <output id="test-normal">아직 실행하지 않았습니다.</output>
+              </article>
+              <article>
+                <h3>경계 사례 S04</h3>
+                <p>현재 필요 중심 기준에서 65점 가까이에 놓이는 사례입니다.</p>
+                <button data-test="boundary" type="button">경계 테스트 실행</button>
+                <output id="test-boundary">아직 실행하지 않았습니다.</output>
+              </article>
+              <article>
+                <h3>빈칸 사례 S07</h3>
+                <p>인터넷 불안정 값 N을 비운 뒤 자동 확정을 막는지 확인합니다.</p>
+                <button data-test="missing" type="button">빈칸 테스트 실행</button>
+                <output id="test-missing">아직 실행하지 않았습니다.</output>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel evidence-panel">
+            <p class="step">5 · 검증 증거를 남겨볼까요?</p>
+            <h2>공통 결과카드 1.1</h2>
+            <p class="explain">세 테스트를 모두 실행한 뒤, 팀의 다음 개선을 적으면 다른 외부 서비스 없이 JSON 파일을 만들 수 있습니다.</p>
+            <div class="evidence-grid">
+              <label class="field">
+                <span>팀코드</span>
+                <input id="team-code" maxlength="20" pattern="[A-Z0-9-]{2,20}" placeholder="예: A-01" autocomplete="off" />
+              </label>
+              <label class="field full">
+                <span>다음에 바꿀 한 가지</span>
+                <textarea id="next-step" maxlength="300" rows="3" placeholder="예: 경계 범위를 3점과 5점으로 비교하고 사람 확인 건수를 다시 살펴봅니다."></textarea>
+              </label>
+              <label class="check full">
+                <input id="privacy-check" type="checkbox" />
+                <span>실명·학교명·학번·연락처·얼굴·음성·비밀키가 없음을 확인했습니다.</span>
+              </label>
+            </div>
+            <div class="evidence-preview">
+              <strong>자동 작성되는 핵심 결과</strong>
+              <p id="evidence-summary"></p>
+            </div>
+            <div class="button-row">
+              <button id="download-card" type="button">결과카드 JSON 내려받기</button>
+              <button id="download-session" class="secondary" type="button">전체 실험 기록 내려받기</button>
+            </div>
+            <p id="message" class="message" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>Nextbridge Classroom Kit · AI 공정성 감사관</span>
+      <span id="save-state">브라우저 저장 준비</span>
+    </footer>
+
+    <script src="./data.js"></script>
+    <script src="./engine.js"></script>
+    <script src="./result-card.js"></script>
+    <script src="./core.js"></script>
+    <script src="./app-state.js"></script>
+    <script src="./app-export.js"></script>
+    <script src="./app-controls.js"></script>
+    <script src="./app-render.js"></script>
+    <script src="./app-events.js"></script>
+  </body>
+</html>

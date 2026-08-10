@@ -53,6 +53,18 @@ try {
     "/demo/",
     "/programs/catalog.json",
     "/programs/program-01/manifest.json",
+    "/programs/program-01/instructor-guide.md",
+    "/programs/program-01/tool/index.html",
+    "/programs/program-01/tool/styles.css",
+    "/programs/program-01/tool/data.js",
+    "/programs/program-01/tool/engine.js",
+    "/programs/program-01/tool/result-card.js",
+    "/programs/program-01/tool/core.js",
+    "/programs/program-01/tool/app-state.js",
+    "/programs/program-01/tool/app-export.js",
+    "/programs/program-01/tool/app-controls.js",
+    "/programs/program-01/tool/app-render.js",
+    "/programs/program-01/tool/app-events.js",
     "/schemas/result-card.schema.json",
     "/docs/program-status.md"
   ];
@@ -66,7 +78,7 @@ try {
   const demo = await (await fetch(`${baseUrl}/demo/`)).text();
   assert.match(demo, /id="result-form"/);
   assert.match(demo, /강사용 3분 시작/);
-  assert.match(demo, /현재 준비 중인 세 사업/);
+  assert.match(demo, /첫 번째 사업에는 로그인 없는 실습 도구/);
   assert.doesNotMatch(demo, /실제 사업명은 아직 확정하지 않았습니다/);
 
   const catalog = await (await fetch(`${baseUrl}/programs/catalog.json`)).json();
@@ -78,7 +90,13 @@ try {
   ).json();
   assert.equal(firstProgram.title, "2026 찾아가는 AI교육 지원 프로그램");
   assert.equal(firstProgram.delivery.status, "partial");
-  assert.equal(firstProgram.resources.status, "pending-review");
+  assert.equal(firstProgram.resources.status, "published");
+  assert.equal(firstProgram.resources.studentTool, "./tool/index.html");
+
+  const tool = await (await fetch(`${baseUrl}/programs/program-01/tool/index.html`)).text();
+  assert.match(tool, /AI 공정성 감사관/);
+  assert.match(tool, /실제 AI 모델이 아닙니다/);
+  assert.match(tool, /공통 결과카드 1\.1/);
 
   console.log("Standalone smoke passed.");
 } finally {
