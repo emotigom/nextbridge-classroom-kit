@@ -6,17 +6,9 @@ const root = new URL("../", import.meta.url);
 
 const expectedPrograms = {
   "program-01": {
-    version: "0.4.0",
-    title: "2026 찾아가는 AI교육 지원 프로그램",
+    version: "0.5.0",
+    title: "학교 AI 수업",
     kind: "school-program",
-    delivery: {
-      status: "partial",
-      durationMinutes: 200,
-      teamSize: null,
-      deviceMode: "unconfirmed",
-      offlineCore: true,
-      gradeBands: ["high"]
-    },
     resources: {
       status: "published",
       studentTool: "./tool/index.html",
@@ -25,17 +17,9 @@ const expectedPrograms = {
     }
   },
   "program-02": {
-    version: "0.3.0",
-    title: "2026 중등 학교급 전환기 찾아가는 AI·SW 프로그램",
+    version: "0.4.0",
+    title: "전환기 AI·SW 수업",
     kind: "school-program",
-    delivery: {
-      status: "partial",
-      durationMinutes: null,
-      teamSize: null,
-      deviceMode: "unconfirmed",
-      offlineCore: true,
-      gradeBands: ["middle", "high"]
-    },
     resources: {
       status: "not-started",
       studentTool: null,
@@ -44,17 +28,9 @@ const expectedPrograms = {
     }
   },
   "program-03": {
-    version: "0.3.0",
-    title: "2026 경기 성취도평가 표준화 평가도구 개발 합숙 워크숍",
+    version: "0.4.0",
+    title: "교육 도구 워크숍",
     kind: "workshop",
-    delivery: {
-      status: "unconfirmed",
-      durationMinutes: null,
-      teamSize: null,
-      deviceMode: "unconfirmed",
-      offlineCore: true,
-      gradeBands: []
-    },
     resources: {
       status: "not-started",
       studentTool: null,
@@ -64,6 +40,15 @@ const expectedPrograms = {
   }
 };
 
+const unconfirmedDelivery = {
+  status: "unconfirmed",
+  durationMinutes: null,
+  teamSize: null,
+  deviceMode: "unconfirmed",
+  offlineCore: true,
+  gradeBands: []
+};
+
 test("catalog contains three unique Nextbridge programs", async () => {
   const catalog = JSON.parse(await readFile(new URL("programs/catalog.json", root), "utf8"));
   assert.equal(catalog.publisher, "Nextbridge");
@@ -71,7 +56,7 @@ test("catalog contains three unique Nextbridge programs", async () => {
   assert.equal(new Set(catalog.programs.map(({ id }) => id)).size, 3);
 });
 
-test("every catalog entry uses verified metadata and a safe public state", async () => {
+test("every catalog entry uses a simple public label and a safe state", async () => {
   const catalogUrl = new URL("programs/catalog.json", root);
   const catalog = JSON.parse(await readFile(catalogUrl, "utf8"));
 
@@ -86,8 +71,8 @@ test("every catalog entry uses verified metadata and a safe public state", async
     assert.equal(manifest.publisher, "Nextbridge");
     assert.equal(manifest.title, expected.title);
     assert.equal(manifest.kind, expected.kind);
-    assert.doesNotMatch(manifest.title, /이름 확정 예정|Nextbridge Program 0\d/i);
-    assert.deepEqual(manifest.delivery, expected.delivery);
+    assert.doesNotMatch(manifest.title, /2026|학교명|지원 프로그램|성취도평가/i);
+    assert.deepEqual(manifest.delivery, unconfirmedDelivery);
     assert.deepEqual(manifest.resources, expected.resources);
     assert.equal(manifest.privacy.studentIdentifier, "team-code-only");
     assert.equal(manifest.integration.mode, "standalone");

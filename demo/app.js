@@ -16,29 +16,22 @@ const downloadButton = document.querySelector("#download");
 const removeButton = document.querySelector("#remove");
 const message = document.querySelector("#message");
 
-const gradeLabels = {
-  elementary: "초등",
-  middle: "중등",
-  high: "고등",
-  teacher: "교원"
-};
-
 const kindLabels = {
-  "school-program": "학교 대상 프로그램",
+  "school-program": "학교 수업",
   workshop: "워크숍"
 };
 
 const programStatusLabels = {
   draft: "준비 중",
-  pilot: "파일럿",
-  stable: "운영 가능",
+  pilot: "시험 운영",
+  stable: "사용 가능",
   retired: "종료"
 };
 
 const resourceStatusLabels = {
-  "not-started": "공개 자료 준비 전",
-  "pending-review": "공개 범위 검토 중",
-  published: "공개 자료 연결됨"
+  "not-started": "자료 준비 중",
+  "pending-review": "자료 정리 중",
+  published: "실습 사용 가능"
 };
 
 let adapter = null;
@@ -83,12 +76,7 @@ function buildResultCard() {
     teamCode: normalizedTeamCode(),
     completedAt: new Date().toISOString(),
     summary: summaryInput.value.trim(),
-    evidence: [
-      {
-        label: "검증 근거",
-        value: evidenceInput.value.trim()
-      }
-    ],
+    evidence: [{ label: "확인한 근거", value: evidenceInput.value.trim() }],
     nextStep: nextStepInput.value.trim(),
     aiDisclosure: {
       status: aiStatusInput.value,
@@ -118,9 +106,7 @@ async function loadPrograms() {
   const catalogResponse = await fetch("../programs/catalog.json", { cache: "no-store" });
   if (!catalogResponse.ok) throw new Error("프로그램 목록을 불러오지 못했습니다.");
   const catalog = await catalogResponse.json();
-  if (catalog.publisher !== "Nextbridge") {
-    throw new Error("프로그램 발행 주체를 확인할 수 없습니다.");
-  }
+  if (catalog.publisher !== "Nextbridge") throw new Error("프로그램 발행 주체를 확인할 수 없습니다.");
 
   programs = await Promise.all(
     catalog.programs.map(async (entry) => {
@@ -128,15 +114,9 @@ async function loadPrograms() {
       const response = await fetch(manifestUrl, { cache: "no-store" });
       if (!response.ok) throw new Error(`${entry.id} 정보를 불러오지 못했습니다.`);
       const manifest = await response.json();
-      if (manifest.id !== entry.id) {
-        throw new Error(`${entry.id}의 목록과 manifest가 일치하지 않습니다.`);
-      }
-      if (manifest.integration.gomCleanEnabled !== false) {
-        throw new Error(`${entry.id}의 비활성 연동 상태를 확인할 수 없습니다.`);
-      }
-      if (!resourceStatusLabels[manifest.resources?.status]) {
-        throw new Error(`${entry.id}의 공개 자료 상태를 확인할 수 없습니다.`);
-      }
+      if (manifest.id !== entry.id) throw new Error(`${entry.id}의 목록과 manifest가 일치하지 않습니다.`);
+      if (manifest.integration.gomCleanEnabled !== false) throw new Error(`${entry.id}의 비활성 연동 상태를 확인할 수 없습니다.`);
+      if (!resourceStatusLabels[manifest.resources?.status]) throw new Error(`${entry.id}의 공개 자료 상태를 확인할 수 없습니다.`);
       Object.defineProperty(manifest, "_resourceBaseUrl", {
         value: new URL("./", manifestUrl),
         enumerable: false
@@ -146,20 +126,9 @@ async function loadPrograms() {
   );
 }
 
-function deliveryMeta(program) {
-  const grades = Array.isArray(program.delivery.gradeBands)
-    ? program.delivery.gradeBands.map((grade) => gradeLabels[grade]).filter(Boolean)
-    : [];
-
-  const audience = grades.length ? `대상: ${grades.join("·")}` : "대상 세부 미확정";
-  const duration = Number.isInteger(program.delivery.durationMinutes)
-    ? `수업시간: ${program.delivery.durationMinutes}분`
-    : "수업시간 미확정";
-
+function programMeta(program) {
   return [
     kindLabels[program.kind] || "교육 프로그램",
-    audience,
-    duration,
     resourceStatusLabels[program.resources.status]
   ];
 }
@@ -184,7 +153,7 @@ function renderPrograms() {
 
     const meta = document.createElement("ul");
     meta.className = "program-meta";
-    for (const text of deliveryMeta(program)) {
+    for (const text of programMeta(program)) {
       const item = document.createElement("li");
       item.textContent = text;
       meta.append(item);
@@ -230,12 +199,11 @@ teamCodeInput.addEventListener("blur", normalizedTeamCode);
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-
   try {
     latestResult = buildResultCard();
     adapter.save(latestResult);
     downloadButton.disabled = false;
-    setMessage(`${latestResult.teamCode}의 결과카드를 이 브라우저에 저장했습니다.`, "success");
+    setMessage(`${latestResult.teamCode}의 결과를 이 브라우저에 저장했습니다.`, "success");
   } catch (error) {
     clearLatestResult();
     setMessage(error.message, "error");
@@ -253,7 +221,6 @@ loadButton.addEventListener("click", () => {
       setMessage("이 기기와 브라우저에서 일치하는 저장본을 찾지 못했습니다.", "error");
       return;
     }
-
     applyResultCard(stored);
     latestResult = stored;
     downloadButton.disabled = false;
@@ -266,7 +233,7 @@ loadButton.addEventListener("click", () => {
 
 downloadButton.addEventListener("click", () => {
   try {
-    if (!latestResult) throw new Error("먼저 결과카드를 저장하거나 불러와 주세요.");
+    if (!latestResult) throw new Error("먼저 결과를 저장하거나 불러와 주세요.");
     downloadResultCard(latestResult);
     setMessage("JSON 파일을 내려받았습니다.", "success");
   } catch (error) {
@@ -296,8 +263,7 @@ try {
   renderPrograms();
   syncAiNote();
 } catch (error) {
-  list.innerHTML =
-    '<p class="load-error">프로그램을 불러오지 못했습니다. <code>npm run dev</code>로 다시 실행해 주세요.</p>';
+  list.innerHTML = '<p class="load-error">프로그램을 불러오지 못했습니다. <code>npm run dev</code>로 다시 실행해 주세요.</p>';
   form.hidden = true;
   setMessage(error.message, "error");
 }

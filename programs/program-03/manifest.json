@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.1",
   "id": "program-03",
-  "version": "0.3.0",
-  "title": "2026 경기 성취도평가 표준화 평가도구 개발 합숙 워크숍",
+  "version": "0.4.0",
+  "title": "교육 도구 워크숍",
   "publisher": "Nextbridge",
   "kind": "workshop",
-  "summary": "경기 성취도평가 표준화 평가도구 개발을 위한 3일 합숙 워크숍입니다. 공개 키트에서 제공할 실행 자료 범위는 아직 검토 중입니다.",
+  "summary": "교육용 도구를 함께 살펴보고 만드는 워크숍입니다. 공개 자료는 준비되는 범위에서 연결합니다.",
   "status": "draft",
   "delivery": {
     "status": "unconfirmed",

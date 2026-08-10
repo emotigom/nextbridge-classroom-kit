@@ -1,21 +1,19 @@
 {
   "schemaVersion": "1.1",
   "id": "program-01",
-  "version": "0.4.0",
-  "title": "2026 찾아가는 AI교육 지원 프로그램",
+  "version": "0.5.0",
+  "title": "학교 AI 수업",
   "publisher": "Nextbridge",
   "kind": "school-program",
-  "summary": "고등학교 1–3학년 대상 4차시 교육사업입니다. 첫 공개 starter인 ‘AI 공정성 감사관’은 로그인 없이 합성데이터로 기준의 영향을 검증합니다.",
+  "summary": "학교에서 사용할 수 있는 AI 수업입니다. 현재 로그인 없이 실행되는 간단한 기준 비교 실습을 제공합니다.",
   "status": "draft",
   "delivery": {
-    "status": "partial",
-    "durationMinutes": 200,
+    "status": "unconfirmed",
+    "durationMinutes": null,
     "teamSize": null,
     "deviceMode": "unconfirmed",
     "offlineCore": true,
-    "gradeBands": [
-      "high"
-    ]
+    "gradeBands": []
   },
   "resources": {
     "status": "published",

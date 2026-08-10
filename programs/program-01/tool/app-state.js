@@ -4,8 +4,8 @@
   class FairnessApp {
     constructor(core) {
       this.core = core;
-      this.storageKey = "nextbridge:program-01:ai-fairness-auditor:v1";
-      this.programVersion = "0.4.0";
+      this.storageKey = "nextbridge:program-01:rule-checker:v1";
+      this.programVersion = "0.5.0";
       this.fieldKeys = Object.keys(core.fields);
       this.$ = (selector) => document.querySelector(selector);
       this.$$ = (selector) => [...document.querySelectorAll(selector)];
@@ -123,7 +123,7 @@
       const results = this.currentResults();
       const priority = results.filter((result) => result.decision === "priority").length;
       const review = results.filter((result) => result.handling === "review").length;
-      return `v0와 비교해 ${this.changedIds().length}개 사례의 결정 또는 처리 방식이 달라졌고, 현재 기준은 ${priority}건을 우선안내하고 ${review}건을 사람 확인으로 보냅니다.`;
+      return `처음 기준과 비교해 ${this.changedIds().length}개 사례의 결정 또는 처리 방식이 달라졌고, 현재 기준은 ${priority}건을 우선안내하고 ${review}건을 사람 확인으로 보냅니다.`;
     }
 
     formatTest(result) {

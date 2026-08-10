@@ -77,26 +77,24 @@ try {
 
   const demo = await (await fetch(`${baseUrl}/demo/`)).text();
   assert.match(demo, /id="result-form"/);
-  assert.match(demo, /강사용 3분 시작/);
-  assert.match(demo, /첫 번째 사업에는 로그인 없는 실습 도구/);
-  assert.doesNotMatch(demo, /실제 사업명은 아직 확정하지 않았습니다/);
+  assert.match(demo, /강사용 빠른 시작/);
+  assert.match(demo, /공개용 이름과 현재 사용할 수 있는 기능/);
+  assert.doesNotMatch(demo, /2026|성취도평가|학교급 전환기 찾아가는/);
 
   const catalog = await (await fetch(`${baseUrl}/programs/catalog.json`)).json();
   assert.equal(catalog.publisher, "Nextbridge");
   assert.equal(catalog.programs.length, 3);
 
-  const firstProgram = await (
-    await fetch(`${baseUrl}/programs/program-01/manifest.json`)
-  ).json();
-  assert.equal(firstProgram.title, "2026 찾아가는 AI교육 지원 프로그램");
-  assert.equal(firstProgram.delivery.status, "partial");
+  const firstProgram = await (await fetch(`${baseUrl}/programs/program-01/manifest.json`)).json();
+  assert.equal(firstProgram.title, "학교 AI 수업");
+  assert.equal(firstProgram.delivery.status, "unconfirmed");
   assert.equal(firstProgram.resources.status, "published");
   assert.equal(firstProgram.resources.studentTool, "./tool/index.html");
 
   const tool = await (await fetch(`${baseUrl}/programs/program-01/tool/index.html`)).text();
-  assert.match(tool, /AI 공정성 감사관/);
+  assert.match(tool, /기준 바꾸기 실습/);
   assert.match(tool, /실제 AI 모델이 아닙니다/);
-  assert.match(tool, /공통 결과카드 1\.1/);
+  assert.match(tool, /팀 결과 저장/);
 
   console.log("Standalone smoke passed.");
 } finally {

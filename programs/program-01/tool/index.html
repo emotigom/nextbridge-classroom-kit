@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Nextbridge AI 공정성 감사관 수업용 규칙 시뮬레이터" />
-    <title>AI 공정성 감사관 · Nextbridge</title>
+    <meta name="description" content="공정한 기준을 살펴보는 Nextbridge 수업용 도구" />
+    <title>기준 바꾸기 실습 · Nextbridge</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="topbar">
       <div>
         <p class="brand">NEXTBRIDGE · PROGRAM 01</p>
-        <h1>AI 공정성 감사관</h1>
-        <p class="subtitle">가중치와 사람 확인 규칙을 바꾸고, 결과가 누구에게 어떻게 달라지는지 검증해봅시다.</p>
+        <h1>기준 바꾸기 실습</h1>
+        <p class="subtitle">가중치와 사람 확인 규칙을 바꾸며 결과 차이를 살펴봅니다.</p>
       </div>
       <div class="truth-card">
         <strong>이 도구의 정체</strong>
@@ -74,7 +74,7 @@
           <section class="stats" aria-label="결과 요약">
             <article><span>우선안내</span><strong id="priority-count">0건</strong></article>
             <article><span>사람 확인</span><strong id="review-count">0건</strong></article>
-            <article><span>v0와 달라진 사례</span><strong id="changed-count">0건</strong></article>
+            <article><span>처리가 달라진 사례</span><strong id="changed-count">0건</strong></article>
             <article><span>현재 기준</span><strong id="current-rule">v0</strong></article>
           </section>
 
@@ -108,24 +108,24 @@
 
           <section class="panel">
             <p class="step">4 · 일부러 실패시켜볼까요?</p>
-            <h2>세 가지 검증</h2>
-            <p class="explain">평범한 사례, 기준점수 근처 사례, 빈칸 사례를 각각 실행하고 자동 확정해도 되는지 확인합니다.</p>
+            <h2>세 가지 확인</h2>
+            <p class="explain">평범한 사례, 기준점수 근처 사례, 빈칸 사례를 각각 실행하고 자동 확정해도 되는지 살펴봅니다.</p>
             <div class="test-grid">
               <article>
-                <h3>정상 사례 S09</h3>
+                <h3>정상 사례</h3>
                 <p>입력이 모두 있고 기준점수에서 충분히 떨어진 사례입니다.</p>
                 <button data-test="normal" type="button">정상 테스트 실행</button>
                 <output id="test-normal">아직 실행하지 않았습니다.</output>
               </article>
               <article>
-                <h3>경계 사례 S04</h3>
-                <p>현재 필요 중심 기준에서 65점 가까이에 놓이는 사례입니다.</p>
+                <h3>경계 사례</h3>
+                <p>기준점수 가까이에 놓이는 사례입니다.</p>
                 <button data-test="boundary" type="button">경계 테스트 실행</button>
                 <output id="test-boundary">아직 실행하지 않았습니다.</output>
               </article>
               <article>
-                <h3>빈칸 사례 S07</h3>
-                <p>인터넷 불안정 값 N을 비운 뒤 자동 확정을 막는지 확인합니다.</p>
+                <h3>빈칸 사례</h3>
+                <p>입력 하나를 비운 뒤 자동 확정을 막는지 확인합니다.</p>
                 <button data-test="missing" type="button">빈칸 테스트 실행</button>
                 <output id="test-missing">아직 실행하지 않았습니다.</output>
               </article>
@@ -133,9 +133,9 @@
           </section>
 
           <section class="panel evidence-panel">
-            <p class="step">5 · 검증 증거를 남겨볼까요?</p>
-            <h2>공통 결과카드 1.1</h2>
-            <p class="explain">세 테스트를 모두 실행한 뒤, 팀의 다음 개선을 적으면 다른 외부 서비스 없이 JSON 파일을 만들 수 있습니다.</p>
+            <p class="step">5 · 결과를 남겨볼까요?</p>
+            <h2>팀 결과 저장</h2>
+            <p class="explain">세 테스트를 마친 뒤 팀의 다음 개선을 적으면 외부 서비스 없이 JSON 파일을 만들 수 있습니다.</p>
             <div class="evidence-grid">
               <label class="field">
                 <span>팀코드</span>
@@ -143,7 +143,7 @@
               </label>
               <label class="field full">
                 <span>다음에 바꿀 한 가지</span>
-                <textarea id="next-step" maxlength="300" rows="3" placeholder="예: 경계 범위를 3점과 5점으로 비교하고 사람 확인 건수를 다시 살펴봅니다."></textarea>
+                <textarea id="next-step" maxlength="300" rows="3" placeholder="예: 사람 확인 범위를 바꾸고 결과를 다시 살펴봅니다."></textarea>
               </label>
               <label class="check full">
                 <input id="privacy-check" type="checkbox" />
@@ -151,11 +151,11 @@
               </label>
             </div>
             <div class="evidence-preview">
-              <strong>자동 작성되는 핵심 결과</strong>
+              <strong>자동으로 정리되는 결과</strong>
               <p id="evidence-summary"></p>
             </div>
             <div class="button-row">
-              <button id="download-card" type="button">결과카드 JSON 내려받기</button>
+              <button id="download-card" type="button">결과 JSON 내려받기</button>
               <button id="download-session" class="secondary" type="button">전체 실험 기록 내려받기</button>
             </div>
             <p id="message" class="message" role="status" aria-live="polite"></p>
@@ -165,7 +165,7 @@
     </main>
 
     <footer>
-      <span>Nextbridge Classroom Kit · AI 공정성 감사관</span>
+      <span>Nextbridge Classroom Kit · 기준 바꾸기 실습</span>
       <span id="save-state">브라우저 저장 준비</span>
     </footer>
 

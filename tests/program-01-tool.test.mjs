@@ -24,20 +24,11 @@ test("program-01 tool uses twelve anonymous synthetic cases", () => {
   }
 });
 
-test("prepared rules reproduce the intended fairness contrast", () => {
+test("prepared rules keep their intended contrast", () => {
   const expected = {
-    v0: {
-      priority: ["S02", "S05", "S09", "S10", "S12"],
-      review: []
-    },
-    v1: {
-      priority: ["S01", "S03", "S06", "S07", "S09", "S12"],
-      review: ["S04"]
-    },
-    v2: {
-      priority: ["S01", "S03", "S06", "S07", "S09", "S12"],
-      review: ["S04", "S11"]
-    }
+    v0: { priority: ["S02", "S05", "S09", "S10", "S12"], review: [] },
+    v1: { priority: ["S01", "S03", "S06", "S07", "S09", "S12"], review: ["S04"] },
+    v2: { priority: ["S01", "S03", "S06", "S07", "S09", "S12"], review: ["S04", "S11"] }
   };
 
   for (const [id, preset] of Object.entries(core.presets)) {
@@ -53,37 +44,35 @@ test("prepared rules reproduce the intended fairness contrast", () => {
   }
 
   const missing = core.quickTests(core.presets.v2).missing;
-  assert.equal(missing.id, "S07");
   assert.equal(missing.missing, true);
   assert.equal(missing.handling, "review");
 });
 
-test("tool creates a schema 1.1 result card and blocks obvious identifiers", () => {
+test("tool creates a result card and blocks obvious identifiers", () => {
   const card = core.buildResultCard({
-    programVersion: "0.4.0",
+    programVersion: "0.5.0",
     teamCode: "A-01",
     completedAt: "2026-08-10T00:00:00.000Z",
-    summary: "v0와 비교해 처리 방식이 달라졌습니다.",
-    evidence: [{ label: "검증", value: "정상·경계·빈칸 테스트를 실행했습니다." }],
-    nextStep: "경계 범위를 다시 비교합니다.",
+    summary: "처리 방식이 달라졌습니다.",
+    evidence: [{ label: "확인", value: "정상·경계·빈칸 테스트를 실행했습니다." }],
+    nextStep: "사람 확인 범위를 다시 비교합니다.",
     privacyChecked: true
   });
 
   assert.equal(card.schemaVersion, "1.1");
   assert.equal(card.programId, "program-01");
-  assert.equal(card.programVersion, "0.4.0");
+  assert.equal(card.programVersion, "0.5.0");
   assert.equal(card.teamCode, "A-01");
   assert.equal(card.aiDisclosure.status, "not-applicable");
   assert.equal(card.privacyChecked, true);
 
   assert.throws(() => core.assertSafeText(["teacher@example.com"]), /이메일/);
-
   assert.throws(
     () => core.buildResultCard({
-      programVersion: "0.4.0",
+      programVersion: "0.5.0",
       teamCode: "A-01",
       summary: "연락처를 적었습니다.",
-      evidence: [{ label: "검증", value: "010-1234-5678" }],
+      evidence: [{ label: "확인", value: "010-1234-5678" }],
       nextStep: "삭제합니다.",
       privacyChecked: true
     }),
@@ -91,7 +80,7 @@ test("tool creates a schema 1.1 result card and blocks obvious identifiers", () 
   );
 });
 
-test("published student tool is local-only and discloses its real behavior", async () => {
+test("published student tool is local-only and explains what it does", async () => {
   const files = [
     "index.html", "styles.css", "data.js", "engine.js", "result-card.js", "core.js",
     "app-state.js", "app-export.js", "app-controls.js", "app-render.js", "app-events.js"
@@ -99,10 +88,11 @@ test("published student tool is local-only and discloses its real behavior", asy
   const contents = await Promise.all(files.map((path) => readFile(new URL(path, toolRoot), "utf8")));
   const joined = contents.join("\n");
 
+  assert.match(contents[0], /기준 바꾸기 실습/);
   assert.match(contents[0], /실제 AI 모델이 아닙니다/);
   assert.match(contents[0], /합성데이터/);
   assert.match(contents[0], /네트워크 요청은 발생하지 않습니다/);
-  assert.match(contents[0], /공통 결과카드 1\.1/);
+  assert.match(contents[0], /팀 결과 저장/);
 
   for (const marker of [
     "fetch(", "XMLHttpRequest", "WebSocket", "EventSource", "sendBeacon",

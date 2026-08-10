@@ -1,22 +1,19 @@
 {
   "schemaVersion": "1.1",
   "id": "program-02",
-  "version": "0.3.0",
-  "title": "2026 중등 학교급 전환기 찾아가는 AI·SW 프로그램",
+  "version": "0.4.0",
+  "title": "전환기 AI·SW 수업",
   "publisher": "Nextbridge",
   "kind": "school-program",
-  "summary": "중학교 3학년과 고등학교 3학년을 위한 찾아가는 AI·SW 프로그램입니다. 차시·활동·사용 도구는 아직 확정 전입니다.",
+  "summary": "학교급 전환기에 활용할 수 있는 AI·SW 수업입니다. 세부 자료는 준비되는 순서대로 연결합니다.",
   "status": "draft",
   "delivery": {
-    "status": "partial",
+    "status": "unconfirmed",
     "durationMinutes": null,
     "teamSize": null,
     "deviceMode": "unconfirmed",
     "offlineCore": true,
-    "gradeBands": [
-      "middle",
-      "high"
-    ]
+    "gradeBands": []
   },
   "resources": {
     "status": "not-started",
