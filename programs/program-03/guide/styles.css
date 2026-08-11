@@ -275,6 +275,7 @@ footer {
 
 .hero-card::before {
   position: absolute;
+  z-index: 0;
   top: 0;
   right: 0;
   width: 110px;
@@ -282,10 +283,13 @@ footer {
   border-radius: 0 0 0 110px;
   background: linear-gradient(145deg, rgba(219, 239, 255, 0.82), rgba(255, 243, 205, 0.75));
   content: "";
+  opacity: 0.72;
+  pointer-events: none;
 }
 
 .hero-card-label {
   position: relative;
+  z-index: 1;
   margin-bottom: 22px;
   color: var(--navy);
   font-size: 0.84rem;
@@ -298,6 +302,8 @@ footer {
 }
 
 .hero-card dl {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 18px;
 }
@@ -473,7 +479,7 @@ footer {
 
 .signature-time {
   display: grid;
-  grid-template-columns: 44px minmax(120px, 1fr);
+  grid-template-columns: 64px minmax(120px, 1fr);
   gap: 3px 10px;
   align-items: baseline;
 }
