@@ -20,7 +20,12 @@ const requiredPaths = [
   "programs/catalog.json",
   "programs/program-01/manifest.json",
   "programs/program-02/manifest.json",
-  "programs/program-03/manifest.json"
+  "programs/program-03/manifest.json",
+  "programs/program-03/guide/index.html",
+  "programs/program-03/guide/styles.css",
+  "programs/program-03/guide/guide.js",
+  "go/workshop/index.html",
+  ".github/workflows/pages.yml"
 ];
 
 for (const path of requiredPaths) {
