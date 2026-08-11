@@ -186,7 +186,7 @@ a {
 .brand small {
   margin-top: 3px;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.15em;
 }
@@ -1102,7 +1102,7 @@ footer p {
     display: grid;
     gap: 4px;
     padding: 9px 4px;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     text-align: center;
   }
 
@@ -1150,7 +1150,7 @@ footer p {
   }
 
   .date-badge span {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
 
   .signature-time {
@@ -1160,7 +1160,7 @@ footer p {
 
   .signature-time span {
     margin-top: 2px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
 
   .signature-time strong {
@@ -1170,7 +1170,7 @@ footer p {
   .count-badge {
     min-width: 45px;
     padding: 8px 7px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
 
   .day-card summary {
@@ -1186,7 +1186,7 @@ footer p {
 
   .day-number {
     padding-inline: 4px;
-    font-size: 0.75rem;
+    font-size: 0.68rem;
   }
 
   .day-card summary strong {
@@ -1194,11 +1194,11 @@ footer p {
   }
 
   .day-card summary small {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
   }
 
   .day-range {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
   }
 
   .timeline {
