@@ -3,6 +3,8 @@
   "title": "교육 도구 워크숍",
   "publisher": "Nextbridge",
   "status": "planning",
-  "summary": "워크숍 자료와 도구를 연결할 자리입니다.",
-  "resources": []
+  "summary": "교사가 현장에서 바로 확인할 수 있는 모바일 워크숍 안내를 제공합니다.",
+  "resources": [
+    "./guide/index.html"
+  ]
 }
